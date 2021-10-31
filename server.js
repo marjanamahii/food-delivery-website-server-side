@@ -22,8 +22,7 @@ async function run() {
         await client.connect();
         const database = client.db('food_delivery');
         const servicesCollection = database.collection('services');
-
-        const placeorderCollection = client.db("food_delivery").collection("placeorder");
+        const placeorderCollection = database.collection('placeorder');
 
         //Get API
         app.get('/services', async (req, res) => {
@@ -85,6 +84,14 @@ async function run() {
             console.log(result);
             res.json(result);
         });
+
+        //Cancel Api
+        app.delete('/placeorder/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await placeorderCollection.deleteOne(query);
+            res.json(result);
+        })
 
 
 
