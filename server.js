@@ -23,6 +23,8 @@ async function run() {
         const database = client.db('food_delivery');
         const servicesCollection = database.collection('services');
 
+        const placeorderCollection = client.db("food_delivery").collection("placeorder");
+
         //Get API
         app.get('/services', async (req, res) => {
             const cursor = servicesCollection.find({});
@@ -56,6 +58,35 @@ async function run() {
             const result = await servicesCollection.deleteOne(query);
             res.json(result);
         })
+
+        //Get API
+        app.get('/placeorder', async (req, res) => {
+            const cursor = placeorderCollection.find({});
+            const services = await cursor.toArray();
+            res.send(services);
+        });
+
+
+        // single placeorder
+        app.get('/placeorder/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log('getting specific service', id);
+            const query = { _id: ObjectId(id) };
+            const service = await placeorderCollection.findOne(query);
+            res.json(service);
+        })
+
+        //placeorder api
+        app.post('/placeorder', async (req, res) => {
+            const service = req.body;
+            console.log('hit the post api', service);
+
+            const result = await placeorderCollection.insertOne(service);
+            console.log(result);
+            res.json(result);
+        });
+
+
 
     }
     finally {
