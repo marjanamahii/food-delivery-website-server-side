@@ -67,6 +67,11 @@ run().catch(console.dir);
 app.get('/', (req, res) => {
     res.send('Food delivery server is running');
 });
+
+app.get('/hello', (req, res) => {
+    res.send('hello updated here')
+})
+
 app.listen(port, () => {
     console.log('Running food delivery server on port', port);
 })
